@@ -117,7 +117,7 @@ func (b *box) RemoveAllCircles() error {
 	if numberOfRemove > 0 {
 		return nil
 	} else {
-		return errors.New("Circles are not exist in the list, func: RemoveAllCircles")
+		return errors.New("dfs")
 	}
 
 }

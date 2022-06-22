@@ -39,14 +39,16 @@ func Test_box_AddShape(t *testing.T) {
 
 type testDataRemoveAllCircles struct {
 	shapes     []Shape
-	wantShapes []Shape
+	wantShapes int
 }
 
 func TestRemoveAllCircles(t *testing.T) {
 	tests := []testDataRemoveAllCircles{
-		{shapes: []Shape{Triangle{Side: 5}, Triangle{Side: 5}}, wantShapes: []Shape{Triangle{Side: 5}, Triangle{Side: 5}}},
-		{shapes: []Shape{Triangle{Side: 5}, Triangle{Side: 5}, Circle{Radius: 2}}, wantShapes: []Shape{Triangle{Side: 5}, Triangle{Side: 5}}},
-		{shapes: []Shape{Circle{Radius: 2}, Triangle{Side: 5}, Triangle{Side: 5}, Circle{Radius: 2}}, wantShapes: []Shape{Triangle{Side: 5}, Triangle{Side: 5}}},
+		{shapes: []Shape{Triangle{Side: 5}, Triangle{Side: 5}}, wantShapes: 2},
+		{shapes: []Shape{Triangle{Side: 5}, Triangle{Side: 5}, Circle{Radius: 2}}, wantShapes: 2},
+		{shapes: []Shape{Circle{Radius: 2}, Triangle{Side: 5}, Triangle{Side: 5}, Circle{Radius: 2}}, wantShapes: 2},
+		{shapes: []Shape{Circle{Radius: 2}, Circle{Radius: 2}, Circle{Radius: 2}, Triangle{Side: 5}, Triangle{Side: 5}, Circle{Radius: 2}}, wantShapes: 2},
+		{shapes: []Shape{Rectangle{Height: 4, Weight: 2}, Circle{Radius: 2}, Rectangle{Height: 4, Weight: 2}, Circle{Radius: 2}, Circle{Radius: 2}, Triangle{Side: 5}, Triangle{Side: 5}, Circle{Radius: 2}}, wantShapes: 4},
 	}
 	for i, test := range tests {
 		box := NewBox(len(test.shapes))
@@ -54,9 +56,31 @@ func TestRemoveAllCircles(t *testing.T) {
 			box.AddShape(shape)
 		}
 		box.RemoveAllCircles()
-		if len(box.shapes) != len(test.wantShapes) {
-			t.Errorf("test %d is fail, len want  %d, len got: %d", i, len(test.wantShapes), len(test.shapes))
+		if len(box.shapes) != test.wantShapes {
+			t.Errorf("test %d is fail, len want  %d, len got: %d", i, test.wantShapes, len(test.shapes))
 		}
+
+	}
+
+}
+func TestRemoveAllCirclesWithoutCircle(t *testing.T) {
+	tests := []testDataRemoveAllCircles{
+		{shapes: []Shape{Triangle{Side: 5}, Triangle{Side: 5}}, wantShapes: 2},
+		{shapes: []Shape{Triangle{Side: 5}, Triangle{Side: 5}, Rectangle{Height: 4, Weight: 2}}, wantShapes: 2},
+		{shapes: []Shape{}, wantShapes: 0},
+	}
+	for _, test := range tests {
+		box := NewBox(len(test.shapes))
+		for _, shape := range test.shapes {
+			box.AddShape(shape)
+		}
+		err := box.RemoveAllCircles()
+		if err == nil {
+			t.Error("Circles are not exist in the list, then returns an error")
+		}
+		// if len(box.shapes) != test.wantShapes {
+		// 	t.Errorf("test %d is fail, len want  %d, len got: %d", i, test.wantShapes, len(test.shapes))
+		// }
 
 	}
 
