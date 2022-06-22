@@ -32,7 +32,7 @@ func (b *box) GetByIndex(i int) (Shape, error) {
 	if len(b.shapes) < i && len(b.shapes) >= 0 {
 		return b.shapes[i], nil
 	} else {
-		return nil, errors.New("index went out of the range")
+		return nil, errors.New("Index went out of the range; func: GetByIndex")
 	}
 
 }
@@ -40,32 +40,75 @@ func (b *box) GetByIndex(i int) (Shape, error) {
 // ExtractByIndex allows getting shape by index and removes this shape from the list.
 // whether shape by index doesn't exist or index went out of the range, then it returns an error
 func (b *box) ExtractByIndex(i int) (Shape, error) {
-	panic("implement me")
+	if len(b.shapes) < i && len(b.shapes) >= 0 {
+		tempShapes := b.shapes[i]
+		if i == 0 {
+			b.shapes = b.shapes[1:]
+			return tempShapes, nil
+		} else if i == len(b.shapes)-1 {
+			b.shapes = b.shapes[:len(b.shapes)-1]
+			return tempShapes, nil
+		} else {
+			sliceOne := b.shapes[0:i]
+			sliceTwo := b.shapes[i+1:]
+			b.shapes = sliceOne
+			b.shapes = append(b.shapes, sliceTwo...)
+			return tempShapes, nil
+		}
+	} else {
+		return nil, errors.New("index went out of the range, func: ExtractByIndex")
+	}
 
 }
 
 // ReplaceByIndex allows replacing shape by index and returns removed shape.
 // whether shape by index doesn't exist or index went out of the range, then it returns an error
 func (b *box) ReplaceByIndex(i int, shape Shape) (Shape, error) {
-	panic("implement me")
+	if len(b.shapes) < i && len(b.shapes) >= 0 {
+		tempShapes := b.shapes[i]
+		b.shapes[i] = shape
+		return tempShapes, nil
+	} else {
+		return nil, errors.New("index went out of the range, func: ReplaceByIndex")
+	}
 
 }
 
 // SumPerimeter provides sum perimeter of all shapes in the list.
 func (b *box) SumPerimeter() float64 {
-	panic("implement me")
+	var summ float64 = 0
+	for _, shape := range b.shapes {
+		summ += shape.CalcPerimeter()
+	}
+	return summ
 
 }
 
 // SumArea provides sum area of all shapes in the list.
 func (b *box) SumArea() float64 {
-	panic("implement me")
+	var summ float64 = 0
+	for _, shape := range b.shapes {
+		summ += shape.CalcArea()
+	}
+	return summ
 
 }
 
 // RemoveAllCircles removes all circles in the list
 // whether circles are not exist in the list, then returns an error
 func (b *box) RemoveAllCircles() error {
-	panic("implement me")
+	var numberOfRemove int = 0
+	for i, shape := range b.shapes {
+		_, ok := shape.(Circle)
+		if ok {
+			_, _ = b.ExtractByIndex(i)
+			numberOfRemove++
+		}
+	}
+	if numberOfRemove > 0 {
+		return nil
+	} else {
+		return errors.New("Circles are not exist in the list, func: RemoveAllCircles")
+	}
 
 }
