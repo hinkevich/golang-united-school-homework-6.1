@@ -32,7 +32,7 @@ func (b *box) GetByIndex(i int) (Shape, error) {
 	if len(b.shapes) < i && len(b.shapes) >= 0 {
 		return b.shapes[i], nil
 	} else {
-		return nil, errors.New("Index went out of the range; func: GetByIndex")
+		return nil, errors.New("dsf")
 	}
 
 }
@@ -108,7 +108,7 @@ func (b *box) RemoveAllCircles() error {
 	if numberOfRemove > 0 {
 		return nil
 	} else {
-		return errors.New("Circles are not exist in the list, func: RemoveAllCircles")
+		return errors.New("ttt Circles are not exist in the list, func: RemoveAllCircles")
 	}
 
 }
