@@ -40,7 +40,7 @@ func (b *box) GetByIndex(i int) (Shape, error) {
 // ExtractByIndex allows getting shape by index and removes this shape from the list.
 // whether shape by index doesn't exist or index went out of the range, then it returns an error
 func (b *box) ExtractByIndex(i int) (Shape, error) {
-	if len(b.shapes) < i && len(b.shapes) >= 0 {
+	if len(b.shapes) > i && i >= 0 {
 		tempShapes := b.shapes[i]
 		if i == 0 {
 			b.shapes = b.shapes[1:]
@@ -64,7 +64,7 @@ func (b *box) ExtractByIndex(i int) (Shape, error) {
 // ReplaceByIndex allows replacing shape by index and returns removed shape.
 // whether shape by index doesn't exist or index went out of the range, then it returns an error
 func (b *box) ReplaceByIndex(i int, shape Shape) (Shape, error) {
-	if len(b.shapes) < i && len(b.shapes) >= 0 {
+	if len(b.shapes) > i && i >= 0 {
 		tempShapes := b.shapes[i]
 		b.shapes[i] = shape
 		return tempShapes, nil
