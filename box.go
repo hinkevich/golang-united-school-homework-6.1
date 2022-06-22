@@ -98,17 +98,26 @@ func (b *box) SumArea() float64 {
 // whether circles are not exist in the list, then returns an error
 func (b *box) RemoveAllCircles() error {
 	var numberOfRemove int = 0
-	for i, shape := range b.shapes {
-		_, ok := shape.(Circle)
-		if ok {
-			_, _ = b.ExtractByIndex(i)
-			numberOfRemove++
+	var isNeedCheck = true
+
+	for isNeedCheck {
+		isNeedCheck = false
+
+		for i, shape := range b.shapes {
+			_, ok := shape.(Circle)
+			if ok {
+				_, _ = b.ExtractByIndex(i)
+				numberOfRemove++
+				isNeedCheck = true
+				break
+			}
 		}
 	}
+
 	if numberOfRemove > 0 {
 		return nil
 	} else {
-		return errors.New("ttt Circles are not exist in the list, func: RemoveAllCircles")
+		return errors.New("Circles are not exist in the list, func: RemoveAllCircles")
 	}
 
 }
